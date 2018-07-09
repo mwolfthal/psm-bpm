@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:enrProcess="http://gov.medicaid.enrollment.process"
+           targetNamespace="http://gov.medicaid.enrollment.process"
+           elementFormDefault="qualified">
+
+    <xs:element name="EnrollmentProcess" type="enrProcess:EnrollmentProcess">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Root element for the entire process model.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:simpleType name="ResultStatus" final="restriction">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="Failure"/>
+            <xs:enumeration value="Success"/>
+            <xs:enumeration value="Unknown"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Result">
+        <xs:sequence>
+            <xs:element name="status" type="enrProcess:ResultStatus"/>
+            <xs:sequence>
+                <xs:element name="messages" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TaskResult">
+        <xs:complexContent>
+            <xs:extension base="enrProcess:Result">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Task">
+        <xs:sequence>
+            <xs:element name="startMethod" type="xs:string"/>
+            <xs:element name="nextMethod" type="xs:string" nillable="true"/>
+            <xs:element name="result" type="enrProcess:TaskResult"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="EnrollmentProcessResult">
+        <xs:complexContent>
+            <xs:extension base="enrProcess:Result">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EnrollmentProcess">
+        <xs:sequence>
+            <xs:element name="processId" type="xs:int"/>
+            <xs:element name="task" type="enrProcess:Task"/>
+            <xs:element name="enrollmentData" type="xs:anyType" minOccurs="0"/>
+            <xs:element name="result" type="enrProcess:EnrollmentProcessResult"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Enrollment">
+        <xs:sequence>
+            <xs:element name="providerName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

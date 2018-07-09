@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<psm:EnrollmentProcess
+  xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:psm="http://gov.medicaid.enrollment.process"
+  xs:schemaLocation="http://gov.medicaid.enrollment.process EnrollmentProcess.xsd">
+  <psm:result>
+    <psm:status>Unknown</psm:status>
+  </psm:result>
+  <psm:task name="Enroll">
+    <psm:startMethod>enroll</psm:startMethod>
+    <psm:result>
+      <psm:status>Unknown</psm:status>
+    </psm:result>
+  </psm:task>
+</psm:EnrollmentProcess>

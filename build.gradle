@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'gradle.plugin.org.openrepose:gradle-jaxb-plugin:2.4.1'
+    }
+
+}
+
+allprojects {
+
+    configurations {
+        testCompile.extendsFrom compileOnly
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'org.codehaus.groovy:groovy-all:2.4.13'
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    }
+}
+
+
+
+apply plugin: 'org.openrepose.gradle.plugins.jaxb'
+apply plugin: 'java'
+test {
+    testLogging {
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+    }
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.dependsOn xjc
+
+dependencies {
+    jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
+    jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
+    jaxb 'javax.xml.bind:jaxb-api:2.2.7'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    'src/main/java',
+                    'src/main/generated'
+            ]
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+jaxb {
+    xsdDir = 'src/main/resources'
+    bindingsDir = 'src/main/resources'
+    xjc {
+        producesDir = 'src/main/generated'
+        destinationDir = 'src/main/generated'
+        generatePackage = 'gov.medicaid.processmanager'
+    }
+}
+clean {
+    delete jaxb.xjc.destinationDir
+}
+
